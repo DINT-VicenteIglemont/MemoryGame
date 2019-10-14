@@ -7,51 +7,59 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="500" MinHeight="500" MinWidth="500"
         Background="LightSalmon">
+
+    <Grid>
+        <DockPanel LastChildFill="True">
+
+            <Border DockPanel.Dock="Top" Background="White" BorderBrush="Black" BorderThickness="3" Height="50" Margin="5" CornerRadius="5" Padding="10">
+
+                <StackPanel Orientation="Horizontal">
+
+                    <TextBlock Text="Dificultad: " VerticalAlignment="Center"/>
+
+                    <RadioButton x:Name="FacilRadio" Content="Facil" VerticalAlignment="Center" Margin="10,0" IsChecked="True"/>
+                    <RadioButton x:Name="MediaRadio" Content="Media" VerticalAlignment="Center" Margin="10,0"/>
+                    <RadioButton x:Name="DificilRadio" Content="Dificil" VerticalAlignment="Center" Margin="10,0"/>
+
+                    <Button x:Name="IniciarButton" Content="Iniciar" Margin="50, 0" Width="75" Click="IniciarButton_Click">
+                        <Button.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Black" Direction="320" Softness="1" ShadowDepth="10" Opacity="1"/>
+                        </Button.BitmapEffect>
+                    </Button>
+
+                </StackPanel>
+
+
+            </Border>
+
+            <Border DockPanel.Dock="Bottom" Background="White" BorderBrush="Black" BorderThickness="3" Height="50" Margin="5" CornerRadius="5" Padding="10">
+
+                <DockPanel LastChildFill="True">
+
+                    <Button DockPanel.Dock="Right" x:Name="MostrarButton" Content="Mostrar" Margin="25, 0" Width="75">
+                        <Button.BitmapEffect>
+                            <DropShadowBitmapEffect Color="Black" Direction="320" Softness="1" ShadowDepth="10" Opacity="1"/>
+                        </Button.BitmapEffect>
+                    </Button>
+
+                    <ProgressBar x:Name="ProgressBar">
+
+                    </ProgressBar>
+
+                </DockPanel>
+
+            </Border>
+
+            <Grid x:Name="TarjetasGrid" ShowGridLines="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+            </Grid>
+
+        </DockPanel>
+    </Grid>
     
-    <DockPanel LastChildFill="True">
-
-        <Border DockPanel.Dock="Top" Background="White" BorderBrush="Black" BorderThickness="3" Height="50" Margin="5" CornerRadius="5" Padding="10">
-
-            <StackPanel Orientation="Horizontal">
-
-                <TextBlock Text="Dificultad: " VerticalAlignment="Center"/>
-                
-                <RadioButton x:Name="FacilRadio" Content="Facil" VerticalAlignment="Center" Margin="10,0"/>
-                <RadioButton x:Name="MediaRadio" Content="Media" VerticalAlignment="Center" Margin="10,0"/>
-                <RadioButton x:Name="DificlRadio" Content="Dificil" VerticalAlignment="Center" Margin="10,0"/>
-
-                <Button x:Name="IniciarButton" Content="Iniciar" Margin="50, 0" Width="75">
-                    <Button.BitmapEffect>
-                        <DropShadowBitmapEffect Color="Black" Direction="320" Softness="1" ShadowDepth="10" Opacity="1"/>
-                    </Button.BitmapEffect>
-                </Button>
-
-            </StackPanel>
-            
-
-        </Border>
-
-        <Border DockPanel.Dock="Bottom" Background="White" BorderBrush="Black" BorderThickness="3" Height="50" Margin="5" CornerRadius="5" Padding="10">
-
-            <DockPanel LastChildFill="True">
-
-                <Button DockPanel.Dock="Right" x:Name="MostrarButton" Content="Mostrar" Margin="25, 0" Width="75">
-                    <Button.BitmapEffect>
-                        <DropShadowBitmapEffect Color="Black" Direction="320" Softness="1" ShadowDepth="10" Opacity="1"/>
-                    </Button.BitmapEffect>
-                </Button>
-
-                <ProgressBar x:Name="ProgressBar">
-                    
-                </ProgressBar>
-                
-            </DockPanel>
-
-        </Border>
-
-        <Grid>
-            
-        </Grid>
-
-    </DockPanel>
 </Window>
