@@ -8,6 +8,25 @@
         Title="MainWindow" Height="500" Width="500" MinHeight="500" MinWidth="500"
         Background="LightSalmon">
 
+    <Window.Resources>
+        <Style TargetType="{x:Type Border}" x:Key="Tarjetas">
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0.5, 1" EndPoint="0.5, 0">
+                        <GradientStop Color="Orange" Offset="1"/>
+                        <GradientStop Color="White" Offset="0"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CornerRadius" Value="5"/>
+            <Setter Property="Margin" Value="2.5"/>
+        </Style>
+    </Window.Resources>
+        
+        
+
     <Grid>
         <DockPanel LastChildFill="True">
 
@@ -50,7 +69,7 @@
 
             </Border>
 
-            <Grid x:Name="TarjetasGrid" ShowGridLines="True">
+            <Grid x:Name="TarjetasGrid" ShowGridLines="False">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
