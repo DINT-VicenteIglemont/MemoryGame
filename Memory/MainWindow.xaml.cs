@@ -29,7 +29,8 @@ namespace Memory
 
         Border bordeGuardado1 = null;
         Border bordeGuardado2 = null;
-        
+
+        bool nuevaRonda = true;
 
         public MainWindow()
         {
@@ -90,6 +91,7 @@ namespace Memory
                     botonVB.Child = botonTB;
 
                     botonTB.FontFamily = new FontFamily("Wingdings");
+
                     bordeBoton.Style = (Style) Resources["Tarjetas"];
 
                     int posicionAleatoria = semilla.Next(caracteres.Count);
@@ -120,6 +122,13 @@ namespace Memory
                 return;
             }
 
+            if (nuevaRonda)
+            {
+                bordeGuardado1 = null;
+                bordeGuardado2 = null;
+                cantidadPulsadas = 0;
+            }
+
             if(texto.Text != Convert.ToChar(interrogante).ToString())
             {
                 return;
@@ -131,21 +140,18 @@ namespace Memory
             if (cantidadPulsadas == 1)
             {
                 bordeGuardado1 = borde;
+                nuevaRonda = false;
             }
-            else if(cantidadPulsadas == 2)
+            else if (cantidadPulsadas == 2)
             {
                 bordeGuardado2 = borde;
 
-                if (cantidadPulsadas == 2)
-                {
-                    bordeGuardado2 = borde;
+                temporizador.Interval = TimeSpan.FromSeconds(1);
+                temporizador.Tick += ComprobarCartas;
+                temporizador.Start();
 
-                    temporizador.Interval = TimeSpan.FromSeconds(1);
-                    temporizador.Tick += ComprobarCartas;
-                    temporizador.Start();
+                nuevaRonda = true;
 
-
-                }
             }
 
         }
@@ -160,7 +166,7 @@ namespace Memory
             Viewbox vb2 = (Viewbox)borde2.Child;
             TextBlock texto2 = (TextBlock)vb2.Child;
 
-            if(texto1 == texto2)
+            if(texto1.Text == texto2.Text)
             {
 
             }
@@ -169,8 +175,6 @@ namespace Memory
                 texto1.Text = Convert.ToChar(interrogante).ToString();
                 texto2.Text = Convert.ToChar(interrogante).ToString();
             }
-
-            cantidadPulsadas = 0;
 
             temporizador.Stop();
         }
