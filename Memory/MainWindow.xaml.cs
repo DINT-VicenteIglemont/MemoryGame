@@ -23,9 +23,13 @@ namespace Memory
     public partial class MainWindow : Window
     {
         int cantidadPulsadas = 0;
-        Border objetoGuardado = null;
         static Random semilla = new Random();
+        DispatcherTimer temporizador = new DispatcherTimer();
         const int interrogante = 78;
+
+        Border bordeGuardado1 = null;
+        Border bordeGuardado2 = null;
+        
 
         public MainWindow()
         {
@@ -107,45 +111,68 @@ namespace Memory
 
         private void BordeBoton_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Border borde1 = (Border)sender;
-            Viewbox view1 = (Viewbox)borde1.Child;
-            TextBlock texto1 = (TextBlock)view1.Child;
+            Border borde = (Border)sender;
+            Viewbox vb = (Viewbox)borde.Child;
+            TextBlock texto = (TextBlock)vb.Child;
 
-            Border borde2 = null;
-            Viewbox view2 = null;
-            TextBlock texto2 = null;
-
-            if (objetoGuardado != null)
+            if (temporizador.IsEnabled)
             {
-                borde2 = objetoGuardado;
-                view2 = (Viewbox)borde2.Child;
-                texto2 = (TextBlock)view2.Child;
+                return;
+            }
+
+            if(texto.Text != Convert.ToChar(interrogante).ToString())
+            {
+                return;
             }
             
+            texto.Text = borde.Tag.ToString();
+            cantidadPulsadas++;
 
-
-            if (borde1 != borde2)
+            if (cantidadPulsadas == 1)
             {
-                cantidadPulsadas++;
-
-                texto1.Text = Convert.ToChar(interrogante).ToString();
+                bordeGuardado1 = borde;
+            }
+            else if(cantidadPulsadas == 2)
+            {
+                bordeGuardado2 = borde;
 
                 if (cantidadPulsadas == 2)
                 {
-                    if(texto1 == texto2)
-                    {
-                        borde1.Background = Brushes.Green;
-                        borde2.Background = Brushes.Green;
-                    }
+                    bordeGuardado2 = borde;
 
-                }
-                else
-                {
-                    objetoGuardado = borde1;
+                    temporizador.Interval = TimeSpan.FromSeconds(1);
+                    temporizador.Tick += ComprobarCartas;
+                    temporizador.Start();
+
+
                 }
             }
-            
 
+        }
+
+        private void ComprobarCartas(object sender, EventArgs e)
+        {
+            Border borde1 = bordeGuardado1;
+            Viewbox vb1 = (Viewbox)borde1.Child;
+            TextBlock texto1 = (TextBlock)vb1.Child;
+
+            Border borde2 = bordeGuardado2;
+            Viewbox vb2 = (Viewbox)borde2.Child;
+            TextBlock texto2 = (TextBlock)vb2.Child;
+
+            if(texto1 == texto2)
+            {
+
+            }
+            else
+            {
+                texto1.Text = Convert.ToChar(interrogante).ToString();
+                texto2.Text = Convert.ToChar(interrogante).ToString();
+            }
+
+            cantidadPulsadas = 0;
+
+            temporizador.Stop();
         }
 
         private void IniciarButton_Click(object sender, RoutedEventArgs e)
