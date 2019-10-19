@@ -31,7 +31,6 @@ namespace Memory
         Border bordeGuardado2 = null;
 
         bool nuevaRonda = true;
-        bool terminado = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -173,7 +172,6 @@ namespace Memory
                 ProgressBar.Value++;
                 if (ProgressBar.Value == ProgressBar.Maximum)
                 {
-                    terminado = true;
                 }
             }
 
