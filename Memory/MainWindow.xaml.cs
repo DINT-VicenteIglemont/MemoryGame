@@ -25,13 +25,13 @@ namespace Memory
         int cantidadPulsadas = 0;
         static Random semilla = new Random();
         DispatcherTimer temporizador = new DispatcherTimer();
-        const int interrogante = 78;
+        const char interrogante = 'N';
 
         Border bordeGuardado1 = null;
         Border bordeGuardado2 = null;
 
         bool nuevaRonda = true;
-
+        bool terminado = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -42,16 +42,19 @@ namespace Memory
             if ((bool)FacilRadio.IsChecked)
             {
                 caracteres = LlenarArray(6);
+                ProgressBar.Maximum = 6;
                 return 3;
             }
             else if ((bool)MediaRadio.IsChecked)
             {
                 caracteres = LlenarArray(8);
+                ProgressBar.Maximum = 8;
                 return 4;
             }
             else
             {
                 caracteres = LlenarArray(10);
+                ProgressBar.Maximum = 10;
                 return 5;
             }
         }
@@ -117,7 +120,7 @@ namespace Memory
             Viewbox vb = (Viewbox)borde.Child;
             TextBlock texto = (TextBlock)vb.Child;
 
-            if (temporizador.IsEnabled)
+            if (temporizador.IsEnabled || (texto.Text != interrogante.ToString()))
             {
                 return;
             }
@@ -127,33 +130,27 @@ namespace Memory
                 bordeGuardado1 = null;
                 bordeGuardado2 = null;
                 cantidadPulsadas = 0;
+                nuevaRonda = false;
             }
 
-            if(texto.Text != Convert.ToChar(interrogante).ToString())
-            {
-                return;
-            }
-            
             texto.Text = borde.Tag.ToString();
             cantidadPulsadas++;
 
             if (cantidadPulsadas == 1)
             {
                 bordeGuardado1 = borde;
-                nuevaRonda = false;
             }
             else if (cantidadPulsadas == 2)
             {
                 bordeGuardado2 = borde;
 
+                temporizador.Tick -= ComprobarCartas;
                 temporizador.Interval = TimeSpan.FromSeconds(1);
                 temporizador.Tick += ComprobarCartas;
                 temporizador.Start();
 
                 nuevaRonda = true;
-
             }
-
         }
 
         private void ComprobarCartas(object sender, EventArgs e)
@@ -166,17 +163,22 @@ namespace Memory
             Viewbox vb2 = (Viewbox)borde2.Child;
             TextBlock texto2 = (TextBlock)vb2.Child;
 
-            if(texto1.Text == texto2.Text)
+            if(texto1.Text != texto2.Text)
             {
-
+                texto1.Text = interrogante.ToString();
+                texto2.Text = interrogante.ToString();
             }
             else
             {
-                texto1.Text = Convert.ToChar(interrogante).ToString();
-                texto2.Text = Convert.ToChar(interrogante).ToString();
+                ProgressBar.Value++;
+                if (ProgressBar.Value == ProgressBar.Maximum)
+                {
+                    terminado = true;
+                }
             }
 
             temporizador.Stop();
+            return;
         }
 
         private void IniciarButton_Click(object sender, RoutedEventArgs e)
@@ -189,6 +191,8 @@ namespace Memory
 
             int filas = ComprobarDificultad(ref caracteres);
             CrearBotones(filas, caracteres);
+
+
         }
     }
 }
