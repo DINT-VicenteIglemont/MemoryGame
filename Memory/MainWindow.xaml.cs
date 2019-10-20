@@ -22,7 +22,7 @@ namespace Memory
     
     public partial class MainWindow : Window
     {
-        const char interrogante = 'B';
+        const char interrogante = 'N';
         bool nuevaRonda;
         int cantidadPulsadas;
 
