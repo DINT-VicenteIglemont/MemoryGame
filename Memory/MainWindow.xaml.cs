@@ -22,18 +22,21 @@ namespace Memory
     
     public partial class MainWindow : Window
     {
-        int cantidadPulsadas = 0;
-        static Random semilla = new Random();
-        DispatcherTimer temporizador = new DispatcherTimer();
         const char interrogante = 'N';
+        bool nuevaRonda;
+        int cantidadPulsadas;
 
-        Border bordeGuardado1 = null;
-        Border bordeGuardado2 = null;
+        Border bordeGuardado1;
+        Border bordeGuardado2;
 
-        bool nuevaRonda = true;
+        DispatcherTimer temporizador = new DispatcherTimer();
+        static Random semilla = new Random();
+        
         public MainWindow()
         {
             InitializeComponent();
+            temporizador.Tick += ComprobarCartas;
+            temporizador.Interval = TimeSpan.FromSeconds(1);
         }
 
         public int ComprobarDificultad(ref ArrayList caracteres)
@@ -92,8 +95,7 @@ namespace Memory
                     bordeBoton.Child = botonVB;
                     botonVB.Child = botonTB;
 
-                    botonTB.FontFamily = new FontFamily("Wingdings");
-
+                    botonTB.Style = (Style)Resources["Fuente"];
                     bordeBoton.Style = (Style) Resources["Tarjetas"];
 
                     int posicionAleatoria = semilla.Next(caracteres.Count);
@@ -119,6 +121,8 @@ namespace Memory
             Viewbox vb = (Viewbox)borde.Child;
             TextBlock texto = (TextBlock)vb.Child;
 
+            
+
             if (temporizador.IsEnabled || (texto.Text != interrogante.ToString()))
             {
                 return;
@@ -133,6 +137,7 @@ namespace Memory
             }
 
             texto.Text = borde.Tag.ToString();
+            borde.Style = (Style)Resources["TarjetaVolteada"];
             cantidadPulsadas++;
 
             if (cantidadPulsadas == 1)
@@ -143,9 +148,6 @@ namespace Memory
             {
                 bordeGuardado2 = borde;
 
-                temporizador.Tick -= ComprobarCartas;
-                temporizador.Interval = TimeSpan.FromSeconds(1);
-                temporizador.Tick += ComprobarCartas;
                 temporizador.Start();
 
                 nuevaRonda = true;
@@ -166,12 +168,20 @@ namespace Memory
             {
                 texto1.Text = interrogante.ToString();
                 texto2.Text = interrogante.ToString();
+                borde1.Style = (Style)Resources["Tarjetas"];
+                borde2.Style = (Style)Resources["Tarjetas"];
+
             }
             else
             {
                 ProgressBar.Value++;
+
+                borde1.Style = (Style)Resources["ParejaEncontrada"];
+                borde2.Style = (Style)Resources["ParejaEncontrada"];
+
                 if (ProgressBar.Value == ProgressBar.Maximum)
                 {
+                    FinDelJuego();
                 }
             }
 
@@ -188,9 +198,36 @@ namespace Memory
             TarjetasGrid.Children.Clear();
 
             int filas = ComprobarDificultad(ref caracteres);
+
+            MostrarButton.IsEnabled = true;
+            bordeGuardado1 = null;
+            bordeGuardado2 = null;
+            nuevaRonda = true;
+            ProgressBar.Value = 0;
+            cantidadPulsadas = 0;
+
             CrearBotones(filas, caracteres);
+        }
 
+        private void MostrarButton_Click(object sender, RoutedEventArgs e)
+        {
+            ProgressBar.Value = ProgressBar.Maximum;
 
+            foreach(Border borde in TarjetasGrid.Children)
+            {
+                Viewbox vb = (Viewbox) borde.Child;
+                TextBlock texto = (TextBlock) vb.Child;
+
+                texto.Text = borde.Tag.ToString();
+                borde.Style = (Style)Resources["ParejaEncontrada"];
+            }
+
+            FinDelJuego();
+        }
+
+        public void FinDelJuego()
+        {
+            MessageBox.Show("Fin del juego", "Juego terminado");
         }
     }
 }
