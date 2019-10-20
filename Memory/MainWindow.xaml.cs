@@ -22,9 +22,11 @@ namespace Memory
     
     public partial class MainWindow : Window
     {
-        const char interrogante = 'N';
+        const char interrogante = 'B';
         bool nuevaRonda;
         int cantidadPulsadas;
+
+        int contadorJugadas;
 
         Border bordeGuardado1;
         Border bordeGuardado2;
@@ -134,6 +136,7 @@ namespace Memory
                 bordeGuardado2 = null;
                 cantidadPulsadas = 0;
                 nuevaRonda = false;
+                contadorJugadas++;
             }
 
             texto.Text = borde.Tag.ToString();
@@ -205,6 +208,7 @@ namespace Memory
             nuevaRonda = true;
             ProgressBar.Value = 0;
             cantidadPulsadas = 0;
+            contadorJugadas = 0;
 
             CrearBotones(filas, caracteres);
         }
@@ -227,7 +231,7 @@ namespace Memory
 
         public void FinDelJuego()
         {
-            MessageBox.Show("Fin del juego", "Juego terminado");
+            MessageBox.Show("Fin del juego \nRondas necesitadas: " + contadorJugadas, "Juego terminado");
         }
     }
 }
