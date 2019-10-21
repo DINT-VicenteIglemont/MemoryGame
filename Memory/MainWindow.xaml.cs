@@ -123,8 +123,6 @@ namespace Memory
             Viewbox vb = (Viewbox)borde.Child;
             TextBlock texto = (TextBlock)vb.Child;
 
-            
-
             if (temporizador.IsEnabled || (texto.Text != interrogante.ToString()))
             {
                 return;
